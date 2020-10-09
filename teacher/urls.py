@@ -3,7 +3,8 @@ from django.urls import path
 from teacher import views
 
 urlpatterns = [
-    # path('teacher/', views.teacherList.as_view()),
+   
     path('teacher/', views.teacherAPIView.as_view()),
     path('teacher/<int:pk>/', views.teacherDetail.as_view()),
+    path('teacher/admin/', views.teacherList.as_view()),
 ]

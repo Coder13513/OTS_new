@@ -20,117 +20,19 @@ from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 
 
-class class1DetailAPIView(generics.GenericAPIView):
-    # queryset                =   Lecture
-    permission_classes      =   []
-    # authentication_classes  =   [TokenAuthentication,SessionAuthentication]
+class class1List(generics.GenericAPIView):  
+ 
     serializer_class        =   class1Serializer
 
     def get(self,request):
         user 			= 		self.request.user
         print(user)
-        shopProfile     =		Attendanceclass1.objects.filter(teacher=user.id)  
-            
+        shopProfile     =		Attendanceclass1.objects.filter(teacher=user.id)             
         serializer      =       self.serializer_class(shopProfile,many=True)
         response = {
                 'data' : serializer.data
                   }
-        return Response(response, status=status.HTTP_200_OK)
-
-# class class1DetailAPIView(generics.GenericAPIView):
-#     queryset                =   Attendanceclass1
-#     permission_classes      =   []
-#     # authentication_classes  =   [TokenAuthentication,SessionAuthentication]
-#     serializer_class        =   class1Serializer
-
-#     def get(self,request):
-#         user 			= 		self.request.user
-#         print(user)
-#         shopProfile     =		Attendanceclass1.objects.filter(teacher=user.id)       
-#         serializer      =       self.serializer_class(shopProfile)
-#         response = {
-#                 'data' : serializer.data
-#                   }
-#         return Response(response, status=status.HTTP_200_OK)
-#         # print(shopProfile)
-#         # shopImage       =		ShopImage.objects.get(shop=user.shopprofile)
-#         # serialize  		=		class1Serializer(shopProfile,context={'request': request})
-#         # serialize  		=		class1Serializer(shopProfile,)
-#         # serialize1 		=		ShopImageSerializer(shopImage,context={'request': request})
-#         # serialize       =       serialize.data
-#         # serialize.update(serialize1.data)
-#         # return Response(serialize.data)
-
-
-class class1List(generics.ListCreateAPIView):
-    # permission_classes = (IsAuthenticated,)
-    queryset =  Attendanceclass1.objects.all()
-    serializer_class = class1Serializer
-
-
-
-class LectrAPIView(generics.GenericAPIView):
-
-    serializer_class = class1Serializer
-    permission_classes = (IsAuthenticated,)
-    renderer_classes = (UserJSONRenderer,)
-   
-    def get(self, request):
-        print("enter")
-        user = self.request.user
-        print(user.id)
-        print(user)
-        try:
-            print("get try")
-            fav = Attendanceclass1.objects.get(teacher_id=user.id)
-            print(fav)
-            fav = Attendanceclass1.objects.get(teacher_id=user.id)
-            print(fav)
-            serializer = self.serializer_class(fav)
-            response = {
-                'data' : serializer.data
-            }
-            return Response(response, status=status.HTTP_200_OK)
-        except ObjectDoesNotExist:
-           
-            return Response(None, status=status.HTTP_404_NOT_FOUND)
-        except:
-            response = {
-                'message': 'error occurred'
-            }
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class class1Detail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,)
-    queryset = Attendanceclass1.objects.all()
-    serializer_class =class1Serializer
-
-class class1APIView(generics.GenericAPIView):    
-    permission_classes = (IsAuthenticated,)    
-    serializer_class = class1Serializer  
-    renderer_classes = (UserJSONRenderer,)
-   
-    def get(self, request):
-        print("enter")
-        user = self.request.user
-        print(user.id)
-        try:  
-            print('filter try')           
-            fav = Attendanceclass1.objects.get(teacher_id=user.id)
-            print(fav)           
-            serializer = self.serializer_class(fav)                  
-            response = {              
-                'data' : serializer.data
-            }
-            return Response(response, status=status.HTTP_200_OK)
-           
-        except ObjectDoesNotExist:
-            return Response(None, status=status.HTTP_404_NOT_FOUND)
-        except:
-            response = {
-                'message': 'error occurred'
-            }
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(response, status=status.HTTP_200_OK)  
 
 
     def post(self, request, format=None):
@@ -138,34 +40,620 @@ class class1APIView(generics.GenericAPIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+class class1Detail(APIView):
+  
+    def get_object(self, pk):
+        try:
+            return Attendanceclass1.objects.get(pk=pk)
+        except Attendanceclass1.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class1Serializer(snippet)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class1Serializer(snippet, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class class1CreateAPIView(generics.CreateAPIView):
-    queryset                =   Attendanceclass1
-    # permission_classes      =   []
-    # authentication_classes  =   [SessionAuthentication]
-    serializer_class        =   class1Serializer
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)  
 
-    def perform_create(self,serializer):
-        serializer.save(user=self.request.user)
+class class2List(generics.GenericAPIView):  
+ 
+    serializer_class        =   class2Serializer
+
+    def get(self,request):
+        user 			= 		self.request.user
+        print(user)
+        shopProfile     =		Attendance_class_2.objects.filter(teacher=user.id)             
+        serializer      =       self.serializer_class(shopProfile,many=True)
+        response = {
+                'data' : serializer.data
+                  }
+        return Response(response, status=status.HTTP_200_OK)  
 
 
-# class class1List(generics.CreateAPIView):
-#     # permission_classes = (IsAdmin,)
-#     queryset = Attendance_class_1.objects.all()
-#     serializer_class = class1Serializer
+    def post(self, request, format=None):
+        serializer = class2Serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
 
-    # def create(self, request, *args, **kwargs):
+class class2Detail(APIView):
+  
+    def get_object(self, pk):
+        try:
+            return Attendance_class_2.objects.get(pk=pk)
+        except Attendance_class_2.DoesNotExist:
+            raise Http404
 
-    #     request.POST._mutable = True
-    #     payload = request.data    
-    #     serializer = self.serializer_class(data=payload)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-    #     response = {
-    #         'data': {"channel": serializer.data}
-    #     }
-    #     return Response(response, status=status.HTTP_201_CREATED)
+    def get(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class2Serializer(snippet)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class2Serializer(snippet, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)  
+
+
+class class3List(generics.GenericAPIView):  
+ 
+    serializer_class        =   class3Serializer
+
+    def get(self,request):
+        user 			= 		self.request.user
+        print(user)
+        shopProfile     =		Attendance_class_3.objects.filter(teacher=user.id)             
+        serializer      =       self.serializer_class(shopProfile,many=True)
+        response = {
+                'data' : serializer.data
+                  }
+        return Response(response, status=status.HTTP_200_OK)  
+
+
+    def post(self, request, format=None):
+        serializer = class3Serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+class class3Detail(APIView):
+  
+    def get_object(self, pk):
+        try:
+            return Attendance_class_3.objects.get(pk=pk)
+        except Attendance_class_3.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class3Serializer(snippet)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class3Serializer(snippet, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)  
+
+class class4List(generics.GenericAPIView):  
+ 
+    serializer_class        =   class4Serializer
+
+    def get(self,request):
+        user 			= 		self.request.user
+        print(user)
+        shopProfile     =		Attendance_class_4.objects.filter(teacher=user.id)             
+        serializer      =       self.serializer_class(shopProfile,many=True)
+        response = {
+                'data' : serializer.data
+                  }
+        return Response(response, status=status.HTTP_200_OK)  
+
+
+    def post(self, request, format=None):
+        serializer = class4Serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+class class4Detail(APIView):
+  
+    def get_object(self, pk):
+        try:
+            return Attendance_class_4.objects.get(pk=pk)
+        except Attendance_class_4.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class4Serializer(snippet)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class4Serializer(snippet, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class class5List(generics.GenericAPIView):  
+ 
+    serializer_class        =   class5Serializer
+
+    def get(self,request):
+        user 			= 		self.request.user
+        print(user)
+        shopProfile     =		Attendance_class_5.objects.filter(teacher=user.id)             
+        serializer      =       self.serializer_class(shopProfile,many=True)
+        response = {
+                'data' : serializer.data
+                  }
+        return Response(response, status=status.HTTP_200_OK)  
+
+
+    def post(self, request, format=None):
+        serializer = class5erializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+class class5Detail(APIView):
+  
+    def get_object(self, pk):
+        try:
+            return Attendance_class_5.objects.get(pk=pk)
+        except Attendance_class_5.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class5Serializer(snippet)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class5Serializer(snippet, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)   
+
+class class6List(generics.GenericAPIView):  
+ 
+    serializer_class        =   class6Serializer
+
+    def get(self,request):
+        user 			= 		self.request.user
+        print(user)
+        shopProfile     =		Attendance_class_6.objects.filter(teacher=user.id)             
+        serializer      =       self.serializer_class(shopProfile,many=True)
+        response = {
+                'data' : serializer.data
+                  }
+        return Response(response, status=status.HTTP_200_OK)  
+
+
+    def post(self, request, format=None):
+        serializer = class6Serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+class class6Detail(APIView):
+  
+    def get_object(self, pk):
+        try:
+            return Attendance_class_6.objects.get(pk=pk)
+        except Attendance_class_6.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class6Serializer(snippet)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class6Serializer(snippet, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)   
+
+class class7List(generics.GenericAPIView):  
+ 
+    serializer_class        =   class7Serializer
+
+    def get(self,request):
+        user 			= 		self.request.user
+        print(user)
+        shopProfile     =		Attendance_class_7.objects.filter(teacher=user.id)             
+        serializer      =       self.serializer_class(shopProfile,many=True)
+        response = {
+                'data' : serializer.data
+                  }
+        return Response(response, status=status.HTTP_200_OK)  
+
+
+    def post(self, request, format=None):
+        serializer = class7Serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+class class7Detail(APIView):
+  
+    def get_object(self, pk):
+        try:
+            return Attendance_class_7.objects.get(pk=pk)
+        except Attendance_class_7.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class7Serializer(snippet)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class7Serializer(snippet, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)   
+
+class class8List(generics.GenericAPIView):  
+ 
+    serializer_class        =   class8Serializer
+
+    def get(self,request):
+        user 			= 		self.request.user
+        print(user)
+        shopProfile     =		Attendance_class_8.objects.filter(teacher=user.id)             
+        serializer      =       self.serializer_class(shopProfile,many=True)
+        response = {
+                'data' : serializer.data
+                  }
+        return Response(response, status=status.HTTP_200_OK)  
+
+
+    def post(self, request, format=None):
+        serializer = class8Serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+class class8Detail(APIView):
+  
+    def get_object(self, pk):
+        try:
+            return Attendance_class_8.objects.get(pk=pk)
+        except Attendance_class_8.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class8Serializer(snippet)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class8Serializer(snippet, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)   
+
+class class9List(generics.GenericAPIView):  
+ 
+    serializer_class        =   class9Serializer
+
+    def get(self,request):
+        user 			= 		self.request.user
+        print(user)
+        shopProfile     =		Attendance_class_9.objects.filter(teacher=user.id)             
+        serializer      =       self.serializer_class(shopProfile,many=True)
+        response = {
+                'data' : serializer.data
+                  }
+        return Response(response, status=status.HTTP_200_OK)  
+
+
+    def post(self, request, format=None):
+        serializer = class9Serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+class class9Detail(APIView):
+  
+    def get_object(self, pk):
+        try:
+            return Attendance_class_9.objects.get(pk=pk)
+        except Attendance_class_9.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class9Serializer(snippet)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class9Serializer(snippet, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)   
+
+class class10List(generics.GenericAPIView):  
+ 
+    serializer_class        =   class10Serializer
+
+    def get(self,request):
+        user 			= 		self.request.user
+        print(user)
+        shopProfile     =		Attendance_class_10.objects.filter(teacher=user.id)             
+        serializer      =       self.serializer_class(shopProfile,many=True)
+        response = {
+                'data' : serializer.data
+                  }
+        return Response(response, status=status.HTTP_200_OK)  
+
+
+    def post(self, request, format=None):
+        serializer = class10Serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+class class10Detail(APIView):
+  
+    def get_object(self, pk):
+        try:
+            return Attendance_class_10.objects.get(pk=pk)
+        except Attendance_class_10.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class10Serializer(snippet)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = class10Serializer(snippet, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class classnurList(generics.GenericAPIView):  
+ 
+    serializer_class        =   classNurserySerializer
+
+    def get(self,request):
+        user 			= 		self.request.user
+        print(user)
+        shopProfile     =		Attendance_class_nursery.objects.filter(teacher=user.id)             
+        serializer      =       self.serializer_class(shopProfile,many=True)
+        response = {
+                'data' : serializer.data
+                  }
+        return Response(response, status=status.HTTP_200_OK)  
+
+
+    def post(self, request, format=None):
+        serializer = classNurserySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+class classnurDetail(APIView):
+  
+    def get_object(self, pk):
+        try:
+            return Attendance_class_nursery.objects.get(pk=pk)
+        except Attendance_class_nursery.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = classNurserySerializer(snippet)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = classNurserySerializer(snippet, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)   
+
+class classlkgList(generics.GenericAPIView):  
+ 
+    serializer_class        =   classLKGSerializer
+
+    def get(self,request):
+        user 			= 		self.request.user
+        print(user)
+        shopProfile     =		Attendance_class_LKG.objects.filter(teacher=user.id)             
+        serializer      =       self.serializer_class(shopProfile,many=True)
+        response = {
+                'data' : serializer.data
+                  }
+        return Response(response, status=status.HTTP_200_OK)  
+
+
+    def post(self, request, format=None):
+        serializer = classLKGSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+class classlkgDetail(APIView):
+  
+    def get_object(self, pk):
+        try:
+            return Attendance_class_LKG.objects.get(pk=pk)
+        except Attendance_class_LKG.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = classLKGSerializer(snippet)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = classLKGSerializer(snippet, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class classukgList(generics.GenericAPIView):  
+ 
+    serializer_class        =   classUKGSerializer
+
+    def get(self,request):
+        user 			= 		self.request.user
+        print(user)
+        shopProfile     =		Attendance_class_UKG.objects.filter(teacher=user.id)             
+        serializer      =       self.serializer_class(shopProfile,many=True)
+        response = {
+                'data' : serializer.data
+                  }
+        return Response(response, status=status.HTTP_200_OK)  
+
+
+    def post(self, request, format=None):
+        serializer = classUKGSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+class classukgDetail(APIView):
+  
+    def get_object(self, pk):
+        try:
+            return Attendance_class_UKG.objects.get(pk=pk)
+        except Attendance_class_UKG.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = classUKGSerializer(snippet)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        serializer = classUKGSerializer(snippet, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+
+
+
+
+
 
 
 

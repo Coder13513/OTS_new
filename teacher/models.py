@@ -4,6 +4,7 @@ from authentication.models import User
 # Create your models here.
 from classes.models import Classes
 from subjects.models import Subject
+from school.models import School
 
 class Teacher(models.Model):
     id=models.AutoField(primary_key=True)
@@ -14,6 +15,7 @@ class Teacher(models.Model):
     state=models.CharField(max_length=120,null=True,blank=True)
     country=models.CharField(max_length=120,null=True,blank=True)
     class_assigned=models.ManyToManyField(Classes) 
+    # school_name=models.ForeignKey(School,on_delete=models.CASCADE)
     # subject_assigned=models.ManyToManyField(Subject)   
   
 

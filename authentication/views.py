@@ -87,6 +87,7 @@ class RegistrationAPIView(generics.GenericAPIView):
 
 class LoginAPIView(generics.GenericAPIView):
     """login a user via email"""
+    permission_classes = []
     serializer_class = LoginSerializer
     renderer_classes = (UserJSONRenderer,)
 

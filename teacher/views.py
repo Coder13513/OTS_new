@@ -18,11 +18,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from authentication.permissions import IsAdmin,IsSuper
 
 
+class teacherList(generics.ListCreateAPIView):
+    permission_classes = [IsAdmin|IsSuper]
+    queryset = Teacher.objects.all()
+    serializer_class = teacherSerializer
 
 class teacherAPIView(generics.GenericAPIView):
 
     serializer_class = teacherSerializer
-    permission_classes = [IsAdmin|IsSuper]
+    
     renderer_classes = (UserJSONRenderer,)
    
     def get(self, request):
@@ -43,34 +47,18 @@ class teacherAPIView(generics.GenericAPIView):
             response = {
                 'message': 'error occurred'
             }
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  
 
-
-
-
-class teacherList(APIView):
-    """
-    List all teachers, or create a new teacher.   """
-    # permission_classes = (IsAuthenticated)
- 
-    # authentication_classes = [TokenAuthentication,SessionAuthentication]
-
-    def get(self, request, format=None):
-        # authentication_classes = [IsProfileOwner]    
-        user = self.request.user
-        print("user :",user)
-        queryset     =		Teacher.objects.filter(User_id=user)
-        serializer = teacherSerializer(queryset,many=True)
-        # authentication_classes = [TokenAuthentication]     
-
-        return Response(serializer.data)
 
     def post(self, request, format=None):
         serializer = teacherSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+
+
 
 class teacherDetail(APIView):
 

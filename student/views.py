@@ -20,8 +20,14 @@ from authentication.permissions import IsAdmin,IsSuper
 
 
 
-class studentAPIView(generics.GenericAPIView):  
+class studentList(generics.ListCreateAPIView):
     permission_classes = [IsAdmin|IsSuper]
+    queryset = Student.objects.all()
+    serializer_class = studentSerializer
+
+
+class studentAPIView(generics.GenericAPIView):  
+    
 
     serializer_class = studentSerializer
    
@@ -48,59 +54,12 @@ class studentAPIView(generics.GenericAPIView):
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class SnippetList(generics.ListCreateAPIView):   
 
-    queryset = Student.objects.all()
-    serializer_class = studentSerializer
-
-    def get_queryset(self, *args, **kwargs):
-     return Student.objects.all().filter(User=self.request.user)
-
-    # def get(self,request):
-    #     user 			= 		self.request.user
-    #     print("studentapi:",user)
-    #     stud            =		Student.objects.get(User=user)
-    #     serialize  		=		studentSerializer(stud,context={'request': request})
-        # return Response(serialize.data)
   
 
-class StudentDetailAPIView(generics.GenericAPIView):   
-    permission_classes      = [IsAdmin|IsSuper]
-    queryset                =   Student
-    
-    authentication_classes  =   [TokenAuthentication,SessionAuthentication]
-    serializer_class        =   studentSerializer
-
-    def get(self,request):
-        user 			= 		self.request.user.id
-        print("studentapi:",user)
-        stu             =		Student.objects.get(User=user)
-        serialize  		=		studentSerializer(stu,context={'request': request})
-        return Response(serialize.data)
-
-class studentList(APIView):
-    """
-    List all teachers, or create a new teacher.
-    """
-  
-    def get(self, request, format=None):
-        user = self.request.user.id
-        print("user :",user)
-        queryset=Student.objects.filter(user=user)
-        serializer = studentSerializer(queryset, many=True)
-        authentication_classes = [TokenAuthentication,SessionAuthentication]
-        # snippets = Student.objects.all()
-        # serializer = studentSerializer(snippets, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        serializer = studentSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class studentDetail(APIView):
+    permission_classes      = [IsAdmin|IsSuper]
     """
     Retrieve, update or delete a teacher instance.
     """
