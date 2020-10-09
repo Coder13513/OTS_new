@@ -23,6 +23,16 @@ class CanEditCategory(BasePermission):
         return False
 
 
+
+class IsAdmin(BasePermission):
+    """Grants client admins full access"""
+
+    def has_permission(self, request, view):
+        user = request.user if request.user.is_authenticated else None
+        if user:
+            # client = user.role.first()
+            return user.role == 'admin' 
+
 class IsClientAdmin(BasePermission):
     """Grants client admins full access"""
 

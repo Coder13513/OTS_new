@@ -3,7 +3,7 @@ from django.urls import path
 from lecture import views
 
 urlpatterns = [
-    # path('lecture/', views.lectureList.as_view()),
-    path('lecture/', views.LectrAPIView.as_view()),
+    path('lecture/', views.LectrAPIView.as_view()),   
     path('lecture/<int:pk>/', views.lectureDetail.as_view()),
+    path('lecture/admin/', views.lectureList.as_view()),
 ]

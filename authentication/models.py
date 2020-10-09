@@ -7,10 +7,10 @@ from datetime import datetime, timedelta
 import jwt
 # from package.models import Package
 from utils.models import BaseAbstractModel
+
 from django.conf import settings
 # from fernet_fields import EncryptedTextField
 from utils.managers import CustomQuerySet
-# from school.models import School
 
 class EmailField(models.EmailField):
     def get_prep_value(self, value):
@@ -25,9 +25,7 @@ class UserManager(BaseUserManager):
         self,
         email=None,
         password=None,
-        role='STUDENT',
-        # school_name='1',
-       
+        role='VI'
     ):
 
         # if not first_name:
@@ -40,7 +38,7 @@ class UserManager(BaseUserManager):
             raise TypeError('Users must have an email address.')
 
         if not password:
-            raise TypeError('Users must have a password.')
+            raise TypeError('Users must have a password.')         
 
         user = self.model(
             # first_name=first_name,
@@ -49,7 +47,6 @@ class UserManager(BaseUserManager):
             username=self.normalize_email(email))
         user.set_password(password),
         user.role = role,
-        # user.school_name=school_name,
         user.save()
         return user
 
@@ -82,19 +79,18 @@ class User(AbstractUser, BaseAbstractModel):
     """ Here we will define the user modal """
 
     USER_ROLES = (
-        ('ADMIN', 'admin'),
-        ('STUDENT', 'student'),
+        ('SUPER','super'),
         ('TEACHER', 'teacher'),
+        ('STUDENT', 'student'),
     )
 
-   
     # username = models.CharField(
     #     null=True, blank=True, max_length=100, unique=True)
     email = EmailField(unique=True)
-    role = models.CharField(verbose_name='user role', max_length=20, choices=USER_ROLES,
+    role = models.CharField(
+        verbose_name='user role', max_length=20, choices=USER_ROLES,
         default='STUDENT'
     )
-    # school_name=models.OneToOneField( School,on_delete=models.CASCADE,)
     #acct_expiry_date=models.DateField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)
     # USERNAME_FIELD = 'email'
@@ -115,12 +111,12 @@ class User(AbstractUser, BaseAbstractModel):
     
     def _generate_jwt_token(self):
 
-        ts = datetime.now()
+        expiration_time = datetime.now() + timedelta(hours=24)
 
         token = jwt.encode({
             'id': self.pk,
             'email': self.get_email,
-            'ts': int(ts.strftime('%s'))
+            #'exp': int(expiration_time.strftime('%s'))
         }, settings.SECRET_KEY, algorithm='HS256')
 
         return token.decode('utf-8')
@@ -140,14 +136,6 @@ class BlackList(BaseAbstractModel):
         past_24 = datetime.now() - timedelta(hours=24)
 
         BlackList.objects.filter(created_at__lt=past_24).delete()
-
-class UserDevices(BaseAbstractModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    device_name = models.CharField(default='Mobile', max_length=100)
-    token = models.CharField(max_length=1000)
-
-    def __str__(self):
-        return f'{self.user}\'s Device'
 
 class UserProfile(BaseAbstractModel):
     """This class defines a Profile model for all Users"""
@@ -169,11 +157,11 @@ class UserProfile(BaseAbstractModel):
     image = models.URLField(null=True, blank=True)
     parental_lock = models.IntegerField(default=6666)
     recording_time = models.IntegerField(default=30)
-    lapsed_recording_time = models.IntegerField(default=0)
-    # security_question = models.CharField(
-    # max_length=255, null=True, blank=False, choices=QUESTION_CHOICES)
+    lapsed_recording_time = models.IntegerField(default=30)
+    security_question = models.CharField(
+        max_length=255, null=True, blank=False, choices=QUESTION_CHOICES)
     # security_answer = EncryptedTextField(null=True)
-    #subscription_package = models.ForeignKey(SubscriptionPackage, models.SET_NULL, blank=True, null=True)
+
     objects = models.Manager()
     active_objects = CustomQuerySet.as_manager()
 

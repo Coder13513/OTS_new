@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    # 'rest_framework.authtoken',
     # 'storages',
     'authentication.apps.AuthenticationConfig',
     'teacher.apps.TeacherConfig',
@@ -96,32 +97,49 @@ MIDDLEWARE = [
 
 AUTH_USER_MODEL = 'authentication.User'
 ROOT_URLCONF = 'ots.urls'
+# 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'authentication.backends.JWTAuthentication',),
-    'EXCEPTION_HANDLER':
-    'utils.exception_handler.custom_exception_handler',
-    'NON_FIELD_ERRORS_KEY': 'errors',
-
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.AllowAny',
-    ),
+    # 'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication',  # <-- And here
     
-    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
-    # 'DEFAULT_VERSION': 'v1',
-    # 'ALLOWED_VERSIONS': ('v1',),
-    'DEFAULT_PAGINATION_CLASS':
-        'rest_framework.pagination.LimitOffsetPagination',
+    # ],
+    # 'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework_simplejwt.authentication.JWTAuthentication',],
+    'DEFAULT_AUTHENTICATION_CLASSES': ('authentication.backends.JWTAuthentication',),
+    'EXCEPTION_HANDLER':    'utils.exception_handler.custom_exception_handler',
+    'NON_FIELD_ERRORS_KEY': 'errors',
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),   
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10,
-    # 'DEFAULT_FILTER_BACKENDS': (
-    #     'django_filters.rest_framework.DjangoFilterBackend',
-    #     'rest_framework.filters.OrderingFilter',
-    # ),
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
-
-   
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.OrderingFilter',
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'authentication.backends.JWTAuthentication',),
+#     'EXCEPTION_HANDLER':
+#     'utils.exception_handler.custom_exception_handler',
+#     'NON_FIELD_ERRORS_KEY': 'errors',
+
+#     'DEFAULT_PERMISSION_CLASSES': (
+#         'rest_framework.permissions.AllowAny',
+#     ),
+    
+#     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
+#     # 'DEFAULT_VERSION': 'v1',
+#     # 'ALLOWED_VERSIONS': ('v1',),
+#     'DEFAULT_PAGINATION_CLASS':
+#         'rest_framework.pagination.LimitOffsetPagination',
+#     'PAGE_SIZE': 10,
+#     # 'DEFAULT_FILTER_BACKENDS': (
+#     #     'django_filters.rest_framework.DjangoFilterBackend',
+#     #     'rest_framework.filters.OrderingFilter',
+#     # ),
+#     'TEST_REQUEST_DEFAULT_FORMAT': 'json',   
+# }
 
 TEMPLATES = [
     {

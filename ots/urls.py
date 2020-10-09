@@ -15,17 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
     path('auth/', include(("authentication.urls", "auth"),namespace="auth")),
     path('teacher/', include(("teacher.urls", "teacher"),namespace="teacher")),
     path('student/', include(("student.urls", "student"),namespace="student")),
-    path('class/', include(("classes.urls", "classes"),namespace="classes")),
+    path('class/', include(("class_level.urls", "class"),namespace="class")),
     path('lecture/', include(("lecture.urls", "lecture"),namespace="lecture")),
     # path('school/', include(("school.urls", "school"),namespace="school")),
     path('subjects/', include(("subjects.urls", "subjects"),namespace="subjects")),
-    path('chapter/', include(("chapter.urls", "classes"),namespace="chapter")),
+    path('chapter/', include(("chapter.urls", "chapter"),namespace="chapter")),
+    path('attendance/', include(("attendance.urls", "attendance"),namespace="attendance")),
+
     
 ]

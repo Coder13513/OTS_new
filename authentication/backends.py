@@ -4,7 +4,7 @@ from django.conf import settings
 
 from rest_framework import authentication, exceptions
 
-from authentication.models import User, UserDevices
+from .models import User, BlackList
 
 
 """JWT Authentication Configuration"""
@@ -79,12 +79,10 @@ class JWTAuthentication(authentication.BaseAuthentication):
             msg = 'Forbidden! This user has been deactivated.'
             raise exceptions.AuthenticationFailed(msg)
 
-        active_session = UserDevices.objects.filter(user_id=user.id).first()
-        if active_session == None:
-            print("No active session")
-            uDevice = UserDevices(user=user, token=token)
-            uDevice.save()
-        if active_session != None and active_session.token != token:
-            print("Active session already exists")
-            raise exceptions.AuthenticationFailed("User session is active on other device")        
+        token = BlackList.objects.filter(token=token).first()
+
+        if token:
+            msg = 'Session Expired.'
+            raise exceptions.AuthenticationFailed(msg)
+
         return (user, token)

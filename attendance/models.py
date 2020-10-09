@@ -7,6 +7,7 @@ from authentication.models import User
 from classes.models import Classes
 from student.models import Student
 from teacher.models import Teacher
+from class_level.models import *
 # from school.models import Class_1_student
 
 # Create your models here.
@@ -26,18 +27,19 @@ from teacher.models import Teacher
 #   class_select=models.TextField(max_length=200)    
 
 
-class Attendance_class_1(models.Model):
+class Attendanceclass1(models.Model):
     id=models.AutoField(primary_key=True)
-    attendance_class=models.CharField(max_length=200,default="class 1",editable=False)
-    teacher=models.ForeignKey(Teacher,on_delete=models.CASCADE)
+    attendance_class=models.CharField(max_length=200,default="1",editable=False)
+    teacher=models.ForeignKey(User,on_delete=models.DO_NOTHING)
+    # teacher=models.ForeignKey(Teacher,on_delete=models.DO_NOTHING)
     subject=models.ForeignKey(Subject,on_delete=models.DO_NOTHING,blank=True)    
     attendance_date=models.DateTimeField() 
     # student=models.ManyToManyField(Attendance_class)  
-    student=models.ManyToManyField(Student)  
+    student=models.ManyToManyField(Class_1_student,blank=True)  
 
     def __str__(self):
-        # return (self.student_new)
-        return '{0} | Attendance:{1}'.format(self.subject,self.attendance_date.strftime('%d-%b-%y'))
+        return F'{self.teacher}'
+        # return (self.attendance_date.strftime('%d-%b-%y'))
 
 
 class Attendance_class_2(models.Model):
@@ -47,7 +49,7 @@ class Attendance_class_2(models.Model):
     subject=models.ForeignKey(Subject,on_delete=models.DO_NOTHING,blank=True)    
     attendance_date=models.DateTimeField() 
     # student=models.ManyToManyField(Attendance_class)  
-    student=models.ManyToManyField(Student)  
+    student=models.ManyToManyField(Class_2_student)  
 
     def __str__(self):
         # return (self.student_new)
@@ -61,7 +63,7 @@ class Attendance_class_3(models.Model):
     subject=models.ForeignKey(Subject,on_delete=models.DO_NOTHING,blank=True)    
     attendance_date=models.DateTimeField() 
     # student=models.ManyToManyField(Attendance_class)  
-    student=models.ManyToManyField(Student)  
+    student=models.ManyToManyField(Class_3_student)  
 
     def __str__(self):
         # return (self.student_new)
@@ -73,7 +75,7 @@ class Attendance_class_4(models.Model):
     subject=models.ForeignKey(Subject,on_delete=models.DO_NOTHING,blank=True)    
     attendance_date=models.DateTimeField() 
     # student=models.ManyToManyField(Attendance_class)  
-    student=models.ManyToManyField(Student)  
+    student=models.ManyToManyField(Class_4_student)  
 
     def __str__(self):
         # return (self.student_new)
@@ -86,7 +88,7 @@ class Attendance_class_5(models.Model):
     subject=models.ForeignKey(Subject,on_delete=models.DO_NOTHING,blank=True)    
     attendance_date=models.DateTimeField() 
     # student=models.ManyToManyField(Attendance_class)  
-    student=models.ManyToManyField(Student)  
+    student=models.ManyToManyField(Class_5_student)  
 
     def __str__(self):
         # return (self.student_new)
@@ -99,7 +101,7 @@ class Attendance_class_6(models.Model):
     subject=models.ForeignKey(Subject,on_delete=models.DO_NOTHING,blank=True)    
     attendance_date=models.DateTimeField() 
     # student=models.ManyToManyField(Attendance_class)  
-    student=models.ManyToManyField(Student)  
+    student=models.ManyToManyField(Class_6_student)  
 
     def __str__(self):
         # return (self.student_new)
@@ -113,7 +115,7 @@ class Attendance_class_7(models.Model):
     subject=models.ForeignKey(Subject,on_delete=models.DO_NOTHING,blank=True)    
     attendance_date=models.DateTimeField() 
     # student=models.ManyToManyField(Attendance_class)  
-    student=models.ManyToManyField(Student)  
+    student=models.ManyToManyField(Class_7_student)  
 
     def __str__(self):
         # return (self.student_new)
@@ -127,7 +129,7 @@ class Attendance_class_8(models.Model):
     subject=models.ForeignKey(Subject,on_delete=models.DO_NOTHING,blank=True)    
     attendance_date=models.DateTimeField() 
     # student=models.ManyToManyField(Attendance_class)  
-    student=models.ManyToManyField(Student)  
+    student=models.ManyToManyField(Class_8_student)  
 
     def __str__(self):
         # return (self.student_new)
@@ -141,7 +143,7 @@ class Attendance_class_9(models.Model):
     subject=models.ForeignKey(Subject,on_delete=models.DO_NOTHING,blank=True)    
     attendance_date=models.DateTimeField() 
     # student=models.ManyToManyField(Attendance_class)  
-    student=models.ManyToManyField(Student)  
+    student=models.ManyToManyField(Class_9_student)  
 
     def __str__(self):
         # return (self.student_new)
@@ -155,7 +157,7 @@ class Attendance_class_10(models.Model):
     subject=models.ForeignKey(Subject,on_delete=models.DO_NOTHING,blank=True)    
     attendance_date=models.DateTimeField() 
     # student=models.ManyToManyField(Attendance_class)  
-    student=models.ManyToManyField(Student)  
+    student=models.ManyToManyField(Class_10_student)  
 
     def __str__(self):
         # return (self.student_new)
@@ -168,7 +170,7 @@ class Attendance_class_nursery(models.Model):
     subject=models.ForeignKey(Subject,on_delete=models.DO_NOTHING,blank=True)    
     attendance_date=models.DateTimeField() 
     # student=models.ManyToManyField(Attendance_class)  
-    student=models.ManyToManyField(Student)  
+    student=models.ManyToManyField(Class_nursery_student)  
 
     def __str__(self):
         # return (self.student_new)
@@ -182,7 +184,7 @@ class Attendance_class_LKG(models.Model):
     subject=models.ForeignKey(Subject,on_delete=models.DO_NOTHING,blank=True)    
     attendance_date=models.DateTimeField() 
     # student=models.ManyToManyField(Attendance_class)  
-    student=models.ManyToManyField(Student)  
+    student=models.ManyToManyField(Class_lkg_student)  
 
     def __str__(self):
         # return (self.student_new)
@@ -191,11 +193,11 @@ class Attendance_class_LKG(models.Model):
 class Attendance_class_UKG(models.Model):
     id=models.AutoField(primary_key=True)
     attendance_class=models.CharField(max_length=200,default="UKG",editable=False)
-    teacher=models.ForeignKey(Teacher,on_delete=models.CASCADE)
+    teacher=models.OneToOneField(User,on_delete=models.CASCADE)
     subject=models.ForeignKey(Subject,on_delete=models.DO_NOTHING,blank=True)    
     attendance_date=models.DateTimeField() 
     # student=models.ManyToManyField(Attendance_class)  
-    student=models.ManyToManyField(Student)  
+    student=models.ManyToManyField(Class_ukg_student)  
 
     def __str__(self):
         # return (self.student_new)

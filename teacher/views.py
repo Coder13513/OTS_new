@@ -15,12 +15,14 @@ from rest_framework import status
 
 from django.core.exceptions import ObjectDoesNotExist
 
+from authentication.permissions import IsAdmin,IsSuper
+
 
 
 class teacherAPIView(generics.GenericAPIView):
 
     serializer_class = teacherSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [IsAdmin|IsSuper]
     renderer_classes = (UserJSONRenderer,)
    
     def get(self, request):
@@ -71,6 +73,8 @@ class teacherList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class teacherDetail(APIView):
+
+    permission_classes = [IsAdmin|IsSuper]
     """
     Retrieve, update or delete a teacher instance.
     """

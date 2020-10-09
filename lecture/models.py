@@ -10,7 +10,7 @@ from authentication.models import User
 class Lecture(models.Model):
     lecture_choice     =(('TEXT','text'),('AUDIO','audio'),('VIDEO','video'))
 
-    name=models.CharField(max_length=288)
+    name=models.CharField(verbose_name='Lecture Name',max_length=288)
     teacher = models.ForeignKey(User, on_delete=models.CASCADE) 
     subject=models.ForeignKey(Subject, on_delete=models.CASCADE)
     chapter=models.ForeignKey(Chapter, on_delete=models.CASCADE)
@@ -20,4 +20,4 @@ class Lecture(models.Model):
     video= models.URLField(max_length=255,null=True,blank=True)
 
     def __str__(self):
-          return self.name
+          return F'{self.teacher} '

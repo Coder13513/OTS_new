@@ -1,63 +1,46 @@
-from django.shortcuts import render
 
-# Create your views here.
-from django.shortcuts import render
-
-# Create your views here.
-from django.shortcuts import render
 from .models import *
-from rest_framework.authentication import SessionAuthentication,TokenAuthentication
+# from rest_framework.authentication import SessionAuthentication,TokenAuthentication
 from .serializers import *
 from rest_framework import  generics
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+# from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
-from rest_framework.permissions import (IsAuthenticated,)
+from rest_framework.permissions import IsAuthenticated 
+from rest_framework.permissions import IsAuthenticated
 
 from authentication.renderer import UserJSONRenderer
+from django.core.exceptions import ObjectDoesNotExist
 
+from authentication.permissions import IsAdmin,IsSuper
+
+
+
+
+class lectureList(generics.ListCreateAPIView):
+    permission_classes = [IsAdmin|IsSuper]
+    queryset = Lecture.objects.all()
+    serializer_class = lectureSerializer
 
 
 class LectrAPIView(generics.GenericAPIView):
-
-    serializer_class = lectureSerializer
-    permission_classes = (IsAuthenticated,)
-    renderer_classes = (UserJSONRenderer,)
    
-    def get(self, request):
-        print("enter")
-        user = self.request.user
-        print(user.id)
-        try:
-            fav = Lecture.objects.get(teacher_id=user.id)
-            print(fav)
-            serializer = self.serializer_class(fav)
-            response = {
+       
+    serializer_class        =   lectureSerializer
+
+    def get(self,request):
+        user 			= 		self.request.user
+        print(user)
+        shopProfile     =		Lecture.objects.filter(teacher=user.id)       
+        serializer      =       self.serializer_class(shopProfile,many=True)
+        response = {
                 'data' : serializer.data
-            }
-            return Response(response, status=status.HTTP_200_OK)
-        except ObjectDoesNotExist:
-           
-            return Response(None, status=status.HTTP_404_NOT_FOUND)
-        except:
-            response = {
-                'message': 'error occurred'
-            }
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                  }
+        return Response(response, status=status.HTTP_200_OK)
 
-
-
-class lectureList(APIView):
-    permission_classes = (IsAuthenticated, )
-   
-    def get(self, request, format=None):
-        snippets = Lecture.objects.all()
-        serializer = lectureSerializer(snippets, many=True)
-        return Response(serializer.data)
 
     def post(self, request, format=None):
         serializer = lectureSerializer(data=request.data)

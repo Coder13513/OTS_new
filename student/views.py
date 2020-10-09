@@ -16,11 +16,15 @@ from rest_framework.permissions import (IsAuthenticated)
 from authentication.renderer import UserJSONRenderer
 
 
+from authentication.permissions import IsAdmin,IsSuper
 
-class studentAPIView(generics.GenericAPIView):
+
+
+class studentAPIView(generics.GenericAPIView):  
+    permission_classes = [IsAdmin|IsSuper]
 
     serializer_class = studentSerializer
-    permission_classes = (IsAuthenticated,)
+   
     renderer_classes = (UserJSONRenderer,)
    
     def get(self, request):
@@ -44,7 +48,8 @@ class studentAPIView(generics.GenericAPIView):
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class SnippetList(generics.ListCreateAPIView):
+class SnippetList(generics.ListCreateAPIView):   
+
     queryset = Student.objects.all()
     serializer_class = studentSerializer
 
@@ -59,9 +64,10 @@ class SnippetList(generics.ListCreateAPIView):
         # return Response(serialize.data)
   
 
-class StudentDetailAPIView(generics.GenericAPIView):
+class StudentDetailAPIView(generics.GenericAPIView):   
+    permission_classes      = [IsAdmin|IsSuper]
     queryset                =   Student
-    permission_classes      =   []
+    
     authentication_classes  =   [TokenAuthentication,SessionAuthentication]
     serializer_class        =   studentSerializer
 

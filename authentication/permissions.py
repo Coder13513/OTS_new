@@ -1,6 +1,21 @@
 from rest_framework.permissions import BasePermission
 
 
+class IsSuper(BasePermission):
+    """Grants client admins full access"""
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role == "('SUPER',)"  
+
+
+class IsAdmin(BasePermission):
+    """Grants client admins full access"""
+
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role == "admin"
+              
+              
+              
 class IsClientAdmin(BasePermission):
     """Grants client admins full access"""
 

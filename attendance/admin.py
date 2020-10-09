@@ -4,7 +4,7 @@ from django.contrib import admin
 from .models import *
 
 
-admin.site.register(Attendance_class_1)
+admin.site.register(Attendanceclass1)
 admin.site.register(Attendance_class_2)
 admin.site.register(Attendance_class_3)
 admin.site.register(Attendance_class_4)

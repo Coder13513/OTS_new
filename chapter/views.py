@@ -16,10 +16,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from authentication.permissions import IsAdmin,IsSuper
 
-class chapterList(APIView):
+
+class chapterList(APIView): 
+    permission_classes = [IsAdmin|IsSuper]
    
-    def get(self, request, format=None):
+    def get(self, request, format=None): 
+       
         snippets = Chapter.objects.all()
         serializer = chapterSerializer(snippets, many=True)
         return Response(serializer.data)
@@ -32,7 +36,8 @@ class chapterList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class chapterDetail(APIView):
-  
+    permission_classes = [IsAdmin|IsSuper]
+
     def get_object(self, pk):
         try:
             return Chapter.objects.get(pk=pk)
