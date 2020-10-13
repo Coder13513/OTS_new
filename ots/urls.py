@@ -29,6 +29,9 @@ urlpatterns = [
     path('subjects/', include(("subjects.urls", "subjects"),namespace="subjects")),
     path('chapter/', include(("chapter.urls", "chapter"),namespace="chapter")),
     path('attendance/', include(("attendance.urls", "attendance"),namespace="attendance")),
+    
+    path('nested_admin/', include('nested_admin.urls')),
+    path('quiz/', include('quiz.urls')),
 
     
 ]

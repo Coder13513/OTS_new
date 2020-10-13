@@ -66,7 +66,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    # 'rest_framework.authtoken',
+    'rest_framework.authtoken',
     # 'storages',
     'authentication.apps.AuthenticationConfig',
     'teacher.apps.TeacherConfig',
@@ -78,6 +78,12 @@ INSTALLED_APPS = [
     'classes.apps.ClassesConfig',
     'attendance.apps.AttendanceConfig',
     'class_level.apps.ClassLevelConfig',
+    # 'assignment.apps.AssignmentConfig',
+    # 'mcq',
+    # 'quiz',
+    'nested_admin',
+    'quiz',
+   
     #'school_A_classes.apps.SchoolAClassesConfig'
 
 ]
