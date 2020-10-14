@@ -12,6 +12,8 @@ from django.conf import settings
 # from fernet_fields import EncryptedTextField
 from utils.managers import CustomQuerySet
 
+from school.models import School
+
 class EmailField(models.EmailField):
     def get_prep_value(self, value):
         value = super(EmailField, self).get_prep_value(value)
@@ -91,6 +93,7 @@ class User(AbstractUser, BaseAbstractModel):
         verbose_name='user role', max_length=20, choices=USER_ROLES,
         default='STUDENT'
     )
+    # school_name=models.ForeignKey(School,on_delete=models.CASCADE,)
     #acct_expiry_date=models.DateField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)
     # USERNAME_FIELD = 'email'

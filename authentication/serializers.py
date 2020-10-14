@@ -82,6 +82,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
         ('STUDENT', 'student'),]
     )
 
+    # school_name=serializers.CharField()
+
     password = serializers.CharField(
         max_length=128,
         min_length=6,
