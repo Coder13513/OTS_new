@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from quiz.models import Answer, Question, Quiz, QuizTaker, UsersAnswer
-from quiz.serializers import MyQuizListSerializer, QuizDetailSerializer, QuizListSerializer, QuizResultSerializer, UsersAnswerSerializer
+from quiz.serializers import MyQuizListSerializer, QuizDetailSerializer, QuizListSerializer, QuizResultSerializer, UsersAnswerSerializer,TeacherQuizListSerializer,QuestionSerializer,AnswerSerializer,NewQuestionSerializer,NewAnswerSerializer
 
 
 class MyQuizListAPI(generics.ListAPIView):
@@ -27,10 +27,7 @@ class MyQuizListAPI(generics.ListAPIView):
 
 class QuizListAPI(generics.ListAPIView):
 	serializer_class = QuizListSerializer
-	permission_classes = [
-		permissions.IsAuthenticated
-	]
-
+	
 	def get_queryset(self, *args, **kwargs):
 		queryset = Quiz.objects.filter(roll_out=True).exclude(quiztaker__user=self.request.user)
 		query = self.request.GET.get("q")
@@ -41,7 +38,21 @@ class QuizListAPI(generics.ListAPIView):
 				Q(description__icontains=query)
 			).distinct()
 
-		return queryset
+		return queryset   
+
+	 
+
+
+class QuizCreateAPI(generics.GenericAPIView):
+
+    def post(self, request, format=None):
+
+        serializer = QuizListSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class QuizDetailAPI(generics.RetrieveAPIView):
@@ -140,3 +151,38 @@ class SubmitQuizAPI(generics.GenericAPIView):
 		quiztaker.save()
 
 		return Response(self.get_serializer(quiz).data)
+
+class TeacherQuizListAPI(generics.ListAPIView):
+
+	serializer_class = TeacherQuizListSerializer
+
+	def get_queryset(self, *args, **kwargs):
+		print(self.request.user)
+		queryset = Quiz.objects.filter(description=self.request.user)
+		query = self.request.GET.get("q")
+
+		if query:
+			queryset = queryset.filter(
+				Q(name__icontains=query) |
+				Q(description__icontains=query)
+			).distinct()
+
+		return queryset
+
+
+
+
+class quesListAPI(generics.ListCreateAPIView): 
+    # permission_classes = (IsAdmin|IsSuper)
+    queryset = Question.objects.all()
+    serializer_class = NewQuestionSerializer  
+
+
+
+
+class ansListAPI(generics.ListCreateAPIView): 
+    # permission_classes = (IsAdmin|IsSuper)
+    queryset = Answer.objects.all()
+    serializer_class = NewAnswerSerializer
+
+

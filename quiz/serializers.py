@@ -19,12 +19,27 @@ class AnswerSerializer(serializers.ModelSerializer):
 		fields = ["id", "question", "label"]
 
 
+class NewAnswerSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Answer
+		fields = ["id", "question", "label","is_correct"]
+
+
 class QuestionSerializer(serializers.ModelSerializer):
 	answer_set = AnswerSerializer(many=True)
 
 	class Meta:
 		model = Question
 		fields = "__all__"
+
+
+class NewQuestionSerializer(serializers.ModelSerializer):
+	# answer_set = AnswerSerializer(many=True)
+
+	class Meta:
+		model = Question
+		fields = "__all__"
+
 
 
 class UsersAnswerSerializer(serializers.ModelSerializer):
@@ -115,4 +130,50 @@ class QuizResultSerializer(serializers.ModelSerializer):
 			return serializer.data
 
 		except QuizTaker.DoesNotExist:
-			return None 
+			return None   
+
+
+class TeacherQuizListSerializer(serializers.ModelSerializer):
+
+	completed = serializers.SerializerMethodField()
+	progress = serializers.SerializerMethodField()
+	questions_count = serializers.SerializerMethodField()
+	score = serializers.SerializerMethodField()
+
+	class Meta:
+		model = Quiz
+		fields = ["id", "name", "description", "image", "slug", "questions_count", "completed", "score", "progress"]
+		read_only_fields = ["questions_count", "completed", "progress"]
+
+	def get_completed(self, obj):
+		try:
+			# quiztaker = QuizTaker.objects.get(user=self.context['request'].user, quiz=obj)
+			quiztaker = QuizTaker.objects.all() 
+			print(quiztaker)
+			# return quiztaker.completed
+			return quiztaker
+		except QuizTaker.DoesNotExist:
+			return None
+
+	def get_progress(self, obj):
+		try:
+			quiztaker = QuizTaker.objects.get(user=self.context['request'].user, quiz=obj)
+			if quiztaker.completed == False:
+				questions_answered = UsersAnswer.objects.filter(quiz_taker=quiztaker, answer__isnull=False).count()
+				total_questions = obj.question_set.all().count()
+				return int(questions_answered / total_questions)
+			return None
+		except QuizTaker.DoesNotExist:
+			return None
+
+	def get_questions_count(self, obj):
+		return obj.question_set.all().count()
+
+	def get_score(self, obj):
+		try:
+			quiztaker = QuizTaker.objects.get(user=self.context['request'].user, quiz=obj)
+			if quiztaker.completed == True:
+				return quiztaker.score
+			return None
+		except QuizTaker.DoesNotExist:
+			return None

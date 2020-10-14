@@ -13,10 +13,10 @@ from authentication.models import User
 
 class Quiz(models.Model):
 	name = models.CharField(max_length=100)
-	description = models.CharField(max_length=70)
-	image = models.ImageField()
+	description = models.ForeignKey(User,verbose_name="Teacher",on_delete=models.CASCADE)
+	image = models.ImageField(blank=True)
 	slug = models.SlugField(blank=True)
-	roll_out = models.BooleanField(default=False)
+	roll_out = models.BooleanField(default=True,editable=False)
 	timestamp = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
