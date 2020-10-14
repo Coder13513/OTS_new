@@ -3,6 +3,6 @@ from django.urls import path
 from classes import views
 
 urlpatterns = [
-    path('class/', views.classesList.as_view()),
-    path('class/<int:pk>/', views.classesDetail.as_view()),
+    path('', views.classesList.as_view()),
+    # path('class/<int:pk>/', views.classesDetail.as_view()),
 ]

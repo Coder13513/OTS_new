@@ -14,21 +14,26 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
+from authentication.permissions import IsAdmin,IsSuper
+
+
 class classesList(APIView):
     """
     List all teachers, or create a new class.
     """
+    permission_classes = [IsAdmin|IsSuper]
+   
     def get(self, request, format=None):
         snippets = Classes.objects.all()
         serializer = classesSerializer(snippets, many=True)
         return Response(serializer.data)
 
-    def post(self, request, format=None):
-        serializer = classesSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def post(self, request, format=None):
+    #     serializer = classesSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class classesDetail(APIView):
     """
