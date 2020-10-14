@@ -6,7 +6,7 @@ from student.models import Student
 
 
 class Class_nursery_student(models.Model):
-    school_name=models.ForeignKey(School,on_delete=models.CASCADE)
+    school_name=models.ForeignKey(School,on_delete=models.CASCADE,blank=True)
     classname=models.CharField(max_length=200,default="class 1",editable=False)
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
     
@@ -16,7 +16,7 @@ class Class_nursery_student(models.Model):
 
 
 class Class_lkg_student(models.Model):
-    school_name=models.ForeignKey(School,on_delete=models.CASCADE)
+    school_name=models.ForeignKey(School,on_delete=models.CASCADE,blank=True)
     classname=models.CharField(max_length=200,default="class 1",editable=False)
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
     
@@ -26,7 +26,7 @@ class Class_lkg_student(models.Model):
 
 
 class Class_ukg_student(models.Model):
-    school_name=models.ForeignKey(School,on_delete=models.CASCADE)
+    school_name=models.ForeignKey(School,on_delete=models.CASCADE,blank=True)
     classname=models.CharField(max_length=200,default="class 1",editable=False)
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
     
@@ -35,7 +35,7 @@ class Class_ukg_student(models.Model):
 
 
 class Class_1_student(models.Model):
-    school_name=models.ForeignKey(School,on_delete=models.CASCADE)
+    school_name=models.ForeignKey(School,on_delete=models.CASCADE,blank=True,null=True)
     classname=models.CharField(max_length=200,default="class 1",editable=False)
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
 
@@ -45,7 +45,7 @@ class Class_1_student(models.Model):
 
 
 class Class_2_student(models.Model):
-    school_name=models.ForeignKey(School,on_delete=models.CASCADE)
+    school_name=models.ForeignKey(School,on_delete=models.CASCADE,blank=True)
     classname=models.CharField(max_length=200,default="class 1",editable=False)
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
     
@@ -55,7 +55,7 @@ class Class_2_student(models.Model):
 
 
 class Class_3_student(models.Model):
-    school_name=models.ForeignKey(School,on_delete=models.CASCADE)
+    school_name=models.ForeignKey(School,on_delete=models.CASCADE,blank=True)
     classname=models.CharField(max_length=200,default="class 1",editable=False)
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
     
@@ -64,7 +64,7 @@ class Class_3_student(models.Model):
 
 
 class Class_4_student(models.Model):
-    school_name=models.ForeignKey(School,on_delete=models.CASCADE)
+    school_name=models.ForeignKey(School,on_delete=models.CASCADE,blank=True)
     classname=models.CharField(max_length=200,default="class 1",editable=False)
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
     
@@ -75,7 +75,7 @@ class Class_4_student(models.Model):
 
 
 class Class_5_student(models.Model):
-    school_name=models.ForeignKey(School,on_delete=models.CASCADE)
+    school_name=models.ForeignKey(School,on_delete=models.CASCADE,blank=True)
     classname=models.CharField(max_length=200,default="class 1",editable=False)
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
     
@@ -85,7 +85,7 @@ class Class_5_student(models.Model):
 
 
 class Class_6_student(models.Model):
-    school_name=models.ForeignKey(School,on_delete=models.CASCADE)
+    school_name=models.ForeignKey(School,on_delete=models.CASCADE,blank=True)
     classname=models.CharField(max_length=200,default="class 1",editable=False)
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
     
@@ -95,7 +95,7 @@ class Class_6_student(models.Model):
 
 
 class Class_7_student(models.Model):
-    school_name=models.ForeignKey(School,on_delete=models.CASCADE)
+    school_name=models.ForeignKey(School,on_delete=models.CASCADE,blank=True)
     classname=models.CharField(max_length=200,default="class 1",editable=False)
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
     
@@ -105,7 +105,7 @@ class Class_7_student(models.Model):
 
 
 class Class_8_student(models.Model):
-    school_name=models.ForeignKey(School,on_delete=models.CASCADE)
+    school_name=models.ForeignKey(School,on_delete=models.CASCADE,blank=True)
     classname=models.CharField(max_length=200,default="class 1",editable=False)
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
     
@@ -115,7 +115,7 @@ class Class_8_student(models.Model):
 
 
 class Class_9_student(models.Model):
-    school_name=models.ForeignKey(School,on_delete=models.CASCADE)
+    school_name=models.ForeignKey(School,on_delete=models.CASCADE,blank=True)
     classname=models.CharField(max_length=200,default="class 1",editable=False)
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
     
@@ -125,7 +125,7 @@ class Class_9_student(models.Model):
     
 
 class Class_10_student(models.Model):
-    school_name=models.ForeignKey(School,on_delete=models.CASCADE)
+    school_name=models.ForeignKey(School,on_delete=models.CASCADE,blank=True)
     classname=models.CharField(max_length=200,default="class 1",editable=False)
     student=models.ForeignKey(Student,on_delete=models.CASCADE)
     
